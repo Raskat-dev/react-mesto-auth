@@ -1,0 +1,25 @@
+
+.card__delete {
+  background-image: url(../../../images/delete.svg);
+  background-color: initial;
+  border: none;
+  box-sizing: content-box;
+  width: 18px;
+  height: 19px;
+  padding: 0;
+  position: absolute;
+  top: 18px;
+  right: 15px;
+  z-index: 99;
+  outline: none;
+}
+
+.card__delete:hover {
+  cursor: pointer;
+  transition: .3s ease-out;
+  opacity: 0.6;
+}
+
+.card__delete:focus {
+  outline: none;
+}

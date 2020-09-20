@@ -1,0 +1,18 @@
+@import url(./__title/card__title.css);
+@import url(./__description/card__description.css);
+@import url(./__image/card__image.css);
+@import url(./__like/card__like.css);
+@import url(./__like/_active/card__like_active.css);
+@import url(./__delete/card__delete.css);
+@import url(./__delete/_type/card__delete_type_hidden.css);
+@import url(./__likes-number/card__likes-number.css);
+@import url(./__like-information/card__like-information.css);
+
+.card {
+  width: 100%;
+  background-color: #fff;
+  border-radius: 10px;
+  position: relative;
+  height: 100%;
+  list-style-type: none;
+}

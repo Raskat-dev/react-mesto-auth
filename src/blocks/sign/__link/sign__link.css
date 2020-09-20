@@ -1,0 +1,29 @@
+.sign__link {
+  font-family: 'Inter', Arial, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  color: #fff;
+  text-decoration: none;
+  margin-top: 15px;
+}
+
+.sign__link:hover {
+  opacity: .6;
+  transition: .3s ease-out;
+  cursor: pointer;
+}
+
+.sign__link:focus {
+  outline: none;
+}
+
+@media screen and (max-width: 767px) {
+  .sign__link {
+    font-size: 12px;
+    line-height: 15px;
+    margin-top: 20px;
+  }
+}
