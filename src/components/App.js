@@ -50,7 +50,7 @@ function App() {
       .catch((err) => {
         console.log(`Ошибка ${err}.`);
       });
-  }, [loggedIn]);
+  }, []);
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -67,22 +67,24 @@ function App() {
     setSelectedCard(true);
   }
 
-  function closeAllPopups() {
-    if (isEditAvatarPopupOpen) {
-      setIsEditAvatarPopupOpen(false);
-    }
-    if (isEditProfilePopupOpen) {
-      setIsEditProfilePopupOpen(false);
-    }
-    if (isAddPlacePopupOpen) {
-      setIsAddPlacePopupOpen(false);
-    }
-    if (selectedCard) {
-      setSelectedCard(false);
-    }
-    if (isInfoTooltipOpen.isOpen) {
-      setIsInfoTooltipOpen({ ...isInfoTooltipOpen, isOpen: false })
-    }
+  function closeAvatarPopup() {
+    setIsEditAvatarPopupOpen(false);
+  }
+
+  function closeProfilePopup() {
+    setIsEditProfilePopupOpen(false);
+  }
+
+  function closeAddPlacePopup() {
+    setIsAddPlacePopupOpen(false);
+  }
+
+  function closeImagePopup() {
+    setSelectedCard(false);
+  }
+
+  function closeInfoPopup() {
+    setIsInfoTooltipOpen({ ...isInfoTooltipOpen, isOpen: false });
   }
 
   function handleUpdateUser(user) {
@@ -251,26 +253,26 @@ function App() {
         <Footer />
         <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}
+          onClose={closeAvatarPopup}
           onUpdateAvatar={handleUpdateAvatar}
         />
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
-          onClose={closeAllPopups}
+          onClose={closeProfilePopup}
           onUpdateUser={handleUpdateUser}
         />
         <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
-          onClose={closeAllPopups}
+          onClose={closeAddPlacePopup}
           onAddPlace={handleAddPlaceSubmit}
         />
         <ImagePopup
           isOpen={selectedCard}
-          onClose={closeAllPopups}
+          onClose={closeImagePopup}
           name={imageData.name}
           link={imageData.link}
         />
-        <InfoTooltip isInfoTooltipOpen={isInfoTooltipOpen} onClose={closeAllPopups} />
+        <InfoTooltip isInfoTooltipOpen={isInfoTooltipOpen} onClose={closeInfoPopup} />
       </div>
     </CurrentUserContext.Provider>
   );
