@@ -33,7 +33,10 @@ function App() {
   const [cards, setCards] = React.useState([]);
 
   const [loggedIn, setLoggedIn] = React.useState({ status: false, email: "" });
-  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState({confirm: null, isOpen: false });
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState({
+    confirm: null,
+    isOpen: false,
+  });
 
   React.useEffect(() => {
     tokenCheck();
@@ -97,7 +100,7 @@ function App() {
           avatar: res.avatar,
           _id: res._id,
         });
-        closeAllPopups();
+        closeProfilePopup()
       })
       .catch((err) => {
         console.log(`Ошибка ${err}.`);
@@ -114,7 +117,7 @@ function App() {
           avatar: res.avatar,
           _id: res._id,
         });
-        closeAllPopups();
+        closeAvatarPopup();
       })
       .catch((err) => {
         console.log(`Ошибка ${err}.`);
@@ -162,7 +165,7 @@ function App() {
       .addNewCard(newCard)
       .then((result) => {
         setCards([result, ...cards]);
-        closeAllPopups();
+        closeAddPlacePopup()
       })
       .catch((err) => {
         console.log(`Ошибка ${err}.`);
@@ -174,7 +177,7 @@ function App() {
   }
 
   function tokenCheck() {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token) {
       auth
         .getContent(token)
@@ -191,29 +194,31 @@ function App() {
     }
   }
 
-  function onRegister({ password, email }){
-    return auth.register(password, email)
-    .then(() => setIsInfoTooltipOpen({ confirm: true, isOpen: true }))
-    .then(() => history.push("/sign-in"))
-    .catch(() => setIsInfoTooltipOpen({ confirm: false, isOpen: true }))
+  function onRegister({ password, email }) {
+    return auth
+      .register(password, email)
+      .then(() => setIsInfoTooltipOpen({ confirm: true, isOpen: true }))
+      .then(() => history.push("/sign-in"))
+      .catch(() => setIsInfoTooltipOpen({ confirm: false, isOpen: true }));
   }
 
   function onLogin({ password, email }) {
-    return auth.authorization(password, email)
-    .then((res) => {
-      if (res.token) {
-        handleLogin();
-        history.push("/")
+    return auth
+      .authorization(password, email)
+      .then((res) => {
+        if (res.token) {
+          handleLogin();
+          history.push("/");
         } else {
-          throw new Error(res.message)
+          throw new Error(res.message);
         }
       })
-    .catch((err) => console.log(err));
+      .catch((err) => console.log(err));
   }
 
-  function onSignOut(){
-    localStorage.removeItem('token');
-    history.push('/sign-in');
+  function onSignOut() {
+    localStorage.removeItem("token");
+    history.push("/sign-in");
   }
 
   return (
@@ -272,7 +277,10 @@ function App() {
           name={imageData.name}
           link={imageData.link}
         />
-        <InfoTooltip isInfoTooltipOpen={isInfoTooltipOpen} onClose={closeInfoPopup} />
+        <InfoTooltip
+          isInfoTooltipOpen={isInfoTooltipOpen}
+          onClose={closeInfoPopup}
+        />
       </div>
     </CurrentUserContext.Provider>
   );
