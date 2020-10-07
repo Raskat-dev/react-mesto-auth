@@ -6,33 +6,33 @@ function EditProfilePopup(props) {
   const { isOpen, onClose, onUpdateUser } = props;
 
   const [name, setName] = React.useState("");
-  const [description, setDescription] = React.useState("");
+  const [about, setAbout] = React.useState("");
 
   const currentUser = React.useContext(CurrentUserContext);
   React.useEffect(() => {
     if (currentUser) {
       setName(currentUser.name);
-      setDescription(currentUser.about);
+      setAbout(currentUser.about);
     }
   }, [currentUser, isOpen]);
 
   function handleChangeName(e) {
     setName(e.target.value);
   }
-  function handleChangeDescription(e) {
-    setDescription(e.target.value);
+  function handleChangeAbout(e) {
+    setAbout(e.target.value);
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (name && description) {
+    if (name && about) {
       onUpdateUser({
-       name,
-       about: description,
+        name,
+        about,
       });
-     } else {
+    } else {
       onClose();
-     }
+    }
   }
 
   return (
@@ -70,8 +70,8 @@ function EditProfilePopup(props) {
           required
           minLength="2"
           maxLength="200"
-          onChange={handleChangeDescription}
-          value={description || ""}
+          onChange={handleChangeAbout}
+          value={about || ""}
         />
         <span id="job-input-error" className="popup__input-error"></span>
       </div>

@@ -12,9 +12,9 @@ function EditAvatarPopup(props) {
       onUpdateAvatar({
         avatar: avatarRef.current.value,
       });
-     } else {
+    } else {
       onClose();
-     }
+    }
   }
 
   return (

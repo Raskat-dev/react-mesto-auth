@@ -4,8 +4,8 @@ import PopupWithForm from "./PopupWithForm";
 function AddPlacePopup(props) {
   const { isOpen, onClose } = props;
 
-  const [place, setPlace] = React.useState();
-  const [image, setImage] = React.useState();
+  const [place, setPlace] = React.useState('');
+  const [image, setImage] = React.useState('');
 
   function handleChangePlace(e) {
     setPlace(e.target.value);
@@ -14,12 +14,23 @@ function AddPlacePopup(props) {
     setImage(e.target.value);
   }
 
+  function handleClose() {
+    onClose();
+    setPlace('');
+    setImage('');
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
-    props.onAddPlace({
-      name: place,
-      link: image,
-    });
+    if (place !== '' && image !== '') {
+      props.onAddPlace({
+        name: place,
+        link: image,
+      });
+    }
+    else {
+      handleClose()
+    }
   }
 
   return (
@@ -28,7 +39,7 @@ function AddPlacePopup(props) {
       title="Новое место"
       buttonText="Сохранить"
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       onSubmit={handleSubmit}
     >
       <div className="popup__input-field">
