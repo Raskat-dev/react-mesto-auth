@@ -1,81 +1,98 @@
 import { myApiData } from "./utils";
-const token = localStorage.getItem('token');
+const token = localStorage.getItem("token");
 
 class Api {
   constructor(options) {
     this._url = options.url;
-    // authorization: this._token,
   }
 
   register(password, email) {
     return fetch(`${this._url}/signup`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({password, email})
-    })
-    .then((res) => {
+      body: JSON.stringify({ password, email }),
+    }).then((res) => {
+      if (res.status === 409) {
+        throw new Error("Пользователь с таким email уже зарегистрирован")
+      }
       if (res.status !== 400) {
         return res.json();
       }
-      throw new Error('Некорректно заполнено одно из полей');
-    })
-  };
+      throw new Error("Некорректно заполнено одно из полей");
+    });
+  }
 
   authorization(password, email) {
     return fetch(`${this._url}/signin`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ password, email })
+      body: JSON.stringify({ password, email }),
     })
-    .then((res) => {
-        if (res.status === 200){
+      .then((res) => {
+        if (res.status === 200) {
           return res.json();
         }
-        if (res.status === 400){
-          throw new Error('Не передано одно из полей');
+        if (res.status === 400) {
+          throw new Error("Не передано одно из полей");
         }
-        if (res.status === 401){
-          throw new Error('Пользователь с таким email не найден');
+        if (res.status === 401) {
+          throw new Error("Неправильный логин или пароль");
         }
       })
-    .then((data) => {
-      if (data.token){
-        localStorage.setItem('token', data.token);
-        return data;
-      } else {
-        return;
-      }
-    })
-    .catch((err) => {
-      console.log(err)
-    });
-  };
+      .then((data) => {
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+          return data;
+        } else {
+          return;
+        }
+      })
+  }
 
   getCurrentUser() {
     return fetch(`${this._url}/users/me`, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     })
-    .then((res) => {
-      if (res.status === 200){
-        return res.json();
-      }
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        }
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  }
+
+  getUser(id) {
+    return fetch(`${this._url}/users/${id}`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     })
-    .catch((err) => {
-      console.log(err.message);
-    });
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        }
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   }
 
   changeProfileInfo(user) {
@@ -83,7 +100,7 @@ class Api {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         name: user.name,
@@ -102,7 +119,7 @@ class Api {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         avatar: user.avatar,

@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import SignForm from "./SignForm";
 
 function Login({ onLogin }) {
   const [user, setUser] = React.useState({
@@ -7,55 +8,102 @@ function Login({ onLogin }) {
     password: "",
   });
 
-  function handleChange(e) {
-    const { name, value } = e.target;
+  const [errors, setErrors] = React.useState({
+    emailError: "",
+    passwordError: "",
+  });
+
+  const [isValid, setIsValid] = React.useState({
+    emailIsValid: false,
+    passwordIsValid: false,
+  });
+
+  const [isFormValid, setIsFormValid] = React.useState(false);
+
+  React.useEffect(() => {
+    if (isValid.emailIsValid && isValid.passwordIsValid) setIsFormValid(true);
+
+    return () => {
+      setIsFormValid(false);
+    };
+  }, [isValid.emailIsValid, isValid.passwordIsValid]);
+
+  function handleEmailChange(evt) {
     setUser({
       ...user,
-      [name]: value,
+      email: evt.target.value,
     });
+
+    if (!evt.target.validity.valid) {
+      setErrors({
+        ...errors,
+        emailError: evt.target.validationMessage,
+      });
+      setIsValid({
+        ...isValid,
+        emailIsValid: false,
+      });
+    } else {
+      setErrors({
+        ...errors,
+        emailError: "",
+      });
+      setIsValid({
+        ...isValid,
+        emailIsValid: true,
+      });
+    }
+  }
+
+  function handlePasswordChange(evt) {
+    setUser({
+      ...user,
+      password: evt.target.value,
+    });
+
+    if (!evt.target.validity.valid) {
+      setErrors({
+        ...errors,
+        passwordError: evt.target.validationMessage,
+      });
+      setIsValid({
+        ...isValid,
+        passwordIsValid: false,
+      });
+    } else {
+      setErrors({
+        ...errors,
+        passwordError: "",
+      });
+      setIsValid({
+        ...isValid,
+        passwordIsValid: true,
+      });
+    }
   }
 
   function handleSubmit(e) {
     e.preventDefault();
     const { email, password } = user;
+    if (!email && !password) return;
     onLogin({ password, email });
   }
 
   return (
-    <div className="sign">
-      <h3 className="sign__title">Вход</h3>
-      <form
-        className="sign__form"
-        method="post"
-        action="#"
-        onSubmit={handleSubmit}
-      >
-        <input
-          id="email"
-          name="email"
-          type="email"
-          value={user.email}
-          onChange={handleChange}
-          placeholder="Email"
-          className="sign__input"
-        />
-        <input
-          id="password"
-          name="password"
-          type="password"
-          value={user.password}
-          onChange={handleChange}
-          placeholder="Пароль"
-          className="sign__input"
-        />
-        <button type="submit" className="sign__button">
-          Войти
-        </button>
-      </form>
+    <SignForm
+      handleSubmit={handleSubmit}
+      user={user}
+      errors={errors}
+      handlePasswordChange={handlePasswordChange}
+      handleEmailChange={handleEmailChange}
+      isFormValid={isFormValid}
+      buttonName="Войти"
+      formName="Вход"
+    >
       <Link to="/sign-up" className="sign__link">
         Еще не зарегистрированы? Регистрация
       </Link>
-    </div>
+    </SignForm>
   );
 }
 
