@@ -1,64 +1,110 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import SignForm from "./SignForm";
 
 function Register({ onRegister }) {
-  const [newUser, setNewUser] = React.useState({
+  const [user, setUser] = React.useState({
     email: "",
     password: "",
   });
 
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setNewUser({
-      ...newUser,
-      [name]: value,
+  const [errors, setErrors] = React.useState({
+    emailError: "",
+    passwordError: "",
+  });
+
+  const [isValid, setIsValid] = React.useState({
+    emailIsValid: false,
+    passwordIsValid: false,
+  });
+
+  const [isFormValid, setIsFormValid] = React.useState(false);
+
+  React.useEffect(() => {
+    if (isValid.emailIsValid && isValid.passwordIsValid) setIsFormValid(true);
+
+    return () => {
+      setIsFormValid(false);
+    };
+  }, [isValid.emailIsValid, isValid.passwordIsValid]);
+
+  function handleEmailChange(evt) {
+    setUser({
+      ...user,
+      email: evt.target.value,
     });
+
+    if (!evt.target.validity.valid) {
+      setErrors({
+        ...errors,
+        emailError: evt.target.validationMessage,
+      });
+      setIsValid({
+        ...isValid,
+        emailIsValid: false,
+      });
+    } else {
+      setErrors({
+        ...errors,
+        emailError: "",
+      });
+      setIsValid({
+        ...isValid,
+        emailIsValid: true,
+      });
+    }
+  }
+
+  function handlePasswordChange(evt) {
+    setUser({
+      ...user,
+      password: evt.target.value,
+    });
+
+    if (!evt.target.validity.valid) {
+      setErrors({
+        ...errors,
+        passwordError: evt.target.validationMessage,
+      });
+      setIsValid({
+        ...isValid,
+        passwordIsValid: false,
+      });
+    } else {
+      setErrors({
+        ...errors,
+        passwordError: "",
+      });
+      setIsValid({
+        ...isValid,
+        passwordIsValid: true,
+      });
+    }
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    const { email, password } = newUser;
-    onRegister({ password, email })
-    setNewUser({email: "", password: ""})
+    const { email, password } = user;
+    if (!email && !password) return;
+    onRegister({ password, email });
+    setUser({ email: "", password: "" });
   }
 
   return (
-    <>
-      <div className="sign">
-        <h3 className="sign__title">Регистрация</h3>
-        <form
-          className="sign__form"
-          method="post"
-          action="#"
-          onSubmit={handleSubmit}
-        >
-          <input
-            id="email"
-            name="email"
-            type="email"
-            value={newUser.email}
-            onChange={handleChange}
-            placeholder="Email"
-            className="sign__input"
-          />
-          <input
-            id="password"
-            name="password"
-            type="password"
-            value={newUser.password}
-            onChange={handleChange}
-            placeholder="Пароль"
-            className="sign__input"
-          />
-          <button type="submit" className="sign__button">
-            Зарегистрироваться
-          </button>
-        </form>
-        <Link to="/sign-in" className="sign__link">
-          Уже зарегистрированы? Войти
-        </Link>
-      </div>
-    </>
+    <SignForm
+      handleSubmit={handleSubmit}
+      user={user}
+      errors={errors}
+      handlePasswordChange={handlePasswordChange}
+      handleEmailChange={handleEmailChange}
+      isFormValid={isFormValid}
+      buttonName="Зарегистрироваться"
+      formName="Регистрация"
+    >
+      <Link to="/sign-in" className="sign__link">
+        Уже зарегистрированы? Войти
+      </Link>
+    </SignForm>
   );
 }
 

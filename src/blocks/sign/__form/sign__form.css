@@ -1,9 +1,11 @@
 .sign__form {
-  max-width: 358px;
+  width: 358px;
+  display: flex;
+  flex-direction: column;
 }
 
 @media screen and (max-width: 767px) {
   .sign__form {
-    max-width: 260px;
+    width: 260px;
   }
 }

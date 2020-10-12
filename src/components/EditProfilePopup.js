@@ -6,33 +6,70 @@ function EditProfilePopup(props) {
   const { isOpen, onClose, onUpdateUser } = props;
 
   const [name, setName] = React.useState("");
-  const [description, setDescription] = React.useState("");
+  const [nameError, setNameError] = React.useState("");
+  const [nameValid, setNameValid] = React.useState(true);
+
+  const [about, setAbout] = React.useState("");
+  const [aboutError, setAboutError] = React.useState("");
+  const [aboutValid, setAboutValid] = React.useState(true);
+
+  const [isValid, setIsValid] = React.useState(false);
 
   const currentUser = React.useContext(CurrentUserContext);
+
   React.useEffect(() => {
     if (currentUser) {
       setName(currentUser.name);
-      setDescription(currentUser.about);
+      setAbout(currentUser.about);
     }
   }, [currentUser, isOpen]);
 
+  React.useEffect(() => {
+    if (nameValid && aboutValid) setIsValid(true);
+
+    return () => {
+      setIsValid(false);
+    };
+  }, [nameValid, aboutValid]);
+
   function handleChangeName(e) {
     setName(e.target.value);
+    if (!e.target.validity.valid) {
+      setNameError(e.target.validationMessage);
+      setNameValid(false);
+    } else {
+      setNameError("");
+      setIsValid(true);
+    }
   }
-  function handleChangeDescription(e) {
-    setDescription(e.target.value);
+  function handleChangeAbout(e) {
+    setAbout(e.target.value);
+    if (!e.target.validity.valid) {
+      setAboutError(e.target.validationMessage);
+      setAboutValid(false);
+    } else {
+      setAboutError("");
+      setAboutValid(true);
+    }
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (name && description) {
+    if (name && about) {
       onUpdateUser({
-       name,
-       about: description,
+        name,
+        about,
       });
-     } else {
-      onClose();
-     }
+      closePopup()
+    } else {
+      closePopup()
+    }
+  }
+
+  function closePopup() {
+    setNameError("");
+    setAboutError("");
+    onClose();
   }
 
   return (
@@ -41,13 +78,16 @@ function EditProfilePopup(props) {
       title="Редактировать профиль"
       buttonText="Сохранить"
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={closePopup}
       onSubmit={handleSubmit}
+      buttonStatus={isValid}
     >
       <div className="popup__input-field">
         <input
           id="name-input"
-          className="popup__input popup__input_name"
+          className={
+            nameError ? "popup__input popup__input_type_error" : "popup__input"
+          }
           type="text"
           placeholder="Введите имя"
           name="name"
@@ -58,22 +98,42 @@ function EditProfilePopup(props) {
           onChange={handleChangeName}
           value={name || ""}
         />
-        <span id="name-input-error" className="popup__input-error"></span>
+        <span
+          id="name-input-error"
+          className={
+            nameError
+              ? "popup__input-error popup__input-error_active"
+              : "popup__input-error"
+          }
+        >
+          {nameError}
+        </span>
       </div>
       <div className="popup__input-field">
         <input
           id="job-input"
-          className="popup__input popup__input_job"
+          className={
+            aboutError ? "popup__input popup__input_type_error" : "popup__input"
+          }
           type="text"
           placeholder="Род занятий"
           name="about"
           required
           minLength="2"
-          maxLength="200"
-          onChange={handleChangeDescription}
-          value={description || ""}
+          maxLength="40"
+          onChange={handleChangeAbout}
+          value={about || ""}
         />
-        <span id="job-input-error" className="popup__input-error"></span>
+        <span
+          id="job-input-error"
+          className={
+            aboutError
+              ? "popup__input-error popup__input-error_active"
+              : "popup__input-error"
+          }
+        >
+          {aboutError}
+        </span>
       </div>
     </PopupWithForm>
   );

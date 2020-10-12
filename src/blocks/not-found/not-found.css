@@ -1,0 +1,21 @@
+.not-found {
+  font-family: 'Inter', Arial, sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 60px;
+  line-height: 22px;
+  text-align: center;
+  color: #fff;
+  text-decoration: none;
+  margin: 0 auto;
+  padding: 50px 0 50px;
+}
+
+@media screen and (max-width: 767px) {
+  .not-found {
+    font-size: 20px;
+    line-height: 17px;
+    margin: 0 4px 0 0;
+    padding: 25px 0 25px;
+  }
+}

@@ -1,0 +1,13 @@
+.sign__error {
+  font-family: 'Inter', Arial, sans-serif;
+  font-style: normal;
+  position: absolute;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 15px;
+  color: #FF0000;
+  opacity: 0;
+  transition: 0.3s;
+  width: 100%;
+  top: 65px;
+}

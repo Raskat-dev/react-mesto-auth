@@ -9,6 +9,5 @@ export const formConfig = {
 }
 
 export const myApiData = {
-  url: 'https://mesto.nomoreparties.co/v1/cohort-12',
-  token: 'c7046677-4ab5-42c0-bca8-fcae81104075'
+  url: 'https://api.raskat.students.nomoreparties.co'
 }
